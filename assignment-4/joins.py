@@ -18,7 +18,7 @@ class Joins():
         query = f"\nSELECT * FROM {self.source_table} LEFT JOIN {self.target_table} ON ({' AND '.join([f'{self.source_table}.{src_cols[i]}{conditions[i]}{self.target_table}.{tgt_cols[i]}' for i in range(len(src_cols))])});"
         print(query)
 
-        # execute the SQL query to create the table
+        # execute the SQL query
         self.cur.execute(query)
 
         results = self.cur.fetchall()
@@ -35,7 +35,7 @@ class Joins():
         query = f"\nSELECT * FROM {self.source_table} RIGHT JOIN {self.target_table} ON ({' AND '.join([f'{self.source_table}.{src_cols[i]}{conditions[i]}{self.target_table}.{tgt_cols[i]}' for i in range(len(src_cols))])});"
         print(query)
 
-        # execute the SQL query to create the table
+        # execute the SQL query
         self.cur.execute(query)
 
         results = self.cur.fetchall()
@@ -51,7 +51,7 @@ class Joins():
         query = f"\nSELECT * FROM {self.source_table} INNER JOIN {self.target_table} ON ({' AND '.join([f'{self.source_table}.{src_cols[i]}{conditions[i]}{self.target_table}.{tgt_cols[i]}' for i in range(len(src_cols))])});"
         print(query)
 
-        # execute the SQL query to create the table
+        # execute the SQL query
         self.cur.execute(query)
 
         results = self.cur.fetchall()
@@ -67,7 +67,7 @@ class Joins():
         query = f"\nSELECT * FROM {self.source_table} FULL OUTER JOIN {self.target_table} ON ({' AND '.join([f'{self.source_table}.{src_cols[i]}{conditions[i]}{self.target_table}.{tgt_cols[i]}' for i in range(len(src_cols))])});"
         print(query)
 
-        # execute the SQL query to create the table
+        # execute the SQL query
         self.cur.execute(query)
 
         results = self.cur.fetchall()
