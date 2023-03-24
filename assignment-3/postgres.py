@@ -52,35 +52,33 @@ class PostgresDB():
         self.cur.execute(f"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '{table_name}')")
         table_exists = self.cur.fetchone()[0]
 
-        if  table_exists:
-
+        if table_exists:
             self.cur.execute(f"DROP TABLE {table_name}")
             self.conn.commit()
+        else:
+            print("Does not exist")
+
 
 
 postgres = PostgresDB()
 
+postgres.drop_table('employees')
 postgres.drop_table('departments')
-
-
 
 
 dept_columns = [('id','SERIAL PRIMARY KEY'),
                ('name','VARCHAR(50) NOT NULL')]
 
-# # create the departments table
-# query =  f"""
-#     CREATE TABLE {table_name} (
-#         id SERIAL PRIMARY KEY,
-#         name VARCHAR(50) NOT NULL
-#     )
-#     """
+postgres.create_table('departments', dept_columns)
+
 
 emp_columns = [('id', 'SERIAL PRIMARY KEY'),
     ('first_name', 'VARCHAR(50) NOT NULL'),
     ('last_name', 'VARCHAR(50) NOT NULL'),
     ('email', 'VARCHAR(50) NOT NULL UNIQUE'),
     ('department_id', 'INTEGER NOT NULL REFERENCES departments(id)')]
+
+postgres.create_table('employees', emp_columns)
 
 # # create the employees table
 # query = f"""
