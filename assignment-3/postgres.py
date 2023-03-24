@@ -5,12 +5,13 @@ class PostgresDB():
     # connect to the DB
     def __init__(self) -> None:
 
-        self.conn = psycopg2.connect(database="postgres") #, user="your_username", password="your_password", host="your_host")# port="your_port")
+        self.conn = psycopg2.connect(database="postgres")
         self.cur = self.conn.cursor()
 
     # create a table 
     def create_table(self, table_name, columns):
 
+        print(f"\nCREATING table {table_name}")
         # define the SQL query to create the table
         sql = f"CREATE TABLE {table_name} ({', '.join([f'{column[0]} {column[1]}' for column in columns])})"
 
@@ -24,10 +25,11 @@ class PostgresDB():
     # insert multiple rows into a table
     def insert_table(self, table_name, values):
 
+        print(f"\nINSERTING to {table_name}")
         for vals in values:
 
             sql = f"INSERT INTO {table_name} VALUES ({', '.join(['%s'] * len(vals))})"
-            print(sql)
+            print(sql, tuple(vals))
 
             self.cur.execute(sql, tuple(vals))
 
@@ -38,6 +40,7 @@ class PostgresDB():
     # drop a table if it exists
     def drop_table(self, table_name):
 
+        print(f"\nDROP TABLE {table_name}")
         self.cur.execute(f"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '{table_name}')")
         table_exists = self.cur.fetchone()[0]
 
@@ -46,6 +49,15 @@ class PostgresDB():
             self.conn.commit()
         else:
             print("Does not exist")
+    
+    def display_table(self, table_name):
+
+        print(f"\nSELECT * FROM {table_name}")
+        self.cur.execute(f"SELECT * FROM {table_name}")
+
+        results = self.cur.fetchall()
+        for row in results:
+            print(row)
 
 
 # Instantiating the Class object
@@ -81,3 +93,7 @@ values = [(1,"John", "Doe", "john.doe@example.com", 100),
           (2,"Jane", "Smith", "jane.smith@example.com", 200),
           (3,"Bob", "Johnson", "bob.johnson@example.com", 100)]
 postgres.insert_table('employees', values)
+
+# DISPLAY the created tables
+postgres.display_table('employees')
+postgres.display_table('departments')
